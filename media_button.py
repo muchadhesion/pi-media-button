@@ -43,5 +43,11 @@ if __name__ == "__main__":
 
 	button.grab()
 	for event in button.read_loop():
-		if event.type == evdev.ecodes.EV_KEY:
+		if event.type == evdev.ecodes.EV_KEY and event.value == evdev.KeyEvent.key_down:
 			print(evdev.categorize(event))
+			if event.code == evdev.ecodes.KEY_VOLUMEUP:
+				av_control.post_volume_up('http://192.168.1.84:55178')
+			elif event.code == evdev.ecodes.KEY_VOLUMEDOWN:
+				av_control.post_volume_down('http://192.168.1.84:55178')
+			elif event.code == evdev.ecodes.KEY_PLAYPAUSE:
+				av_control.radio_play('http://192.168.1.84:55178')
