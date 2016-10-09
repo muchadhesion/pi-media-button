@@ -8,7 +8,7 @@ def test_volume_up():
 
 def test_radio_play():
 	av_control.radio_play('http://192.168.1.84:55178')
-	time.sleep(5)
+	time.sleep(2)
 	av_control.radio_stop('http://192.168.1.84:55178')
 
 if __name__ == "__main__":
