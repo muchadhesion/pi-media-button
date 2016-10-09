@@ -37,7 +37,7 @@ def post_volume_down(url_base, control_url = 'Ds/Volume/control' ):
 			'<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"'
 			's:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
 				'<s:Body>'
-				'<u:VolumeInc xmlns:u="urn:av-openhome-org:service:Volume:1"></u:VolumeDec>'
+				'<u:VolumeDec xmlns:u="urn:av-openhome-org:service:Volume:1"></u:VolumeDec>'
 			'</s:Body>'
 			'</s:Envelope>'
 			)
