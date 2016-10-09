@@ -29,22 +29,7 @@ def find_button_device(name):
 			return device
 	return None
 
-
-if __name__ == "__main__":
-	import sys
-	import evdev
-
-	button_name = 'Satechi Media Button'
-	button = find_button_device(button_name)
-	if button == None:
-		if len(devices()) == 0:
-			print "No devices found, try running with sudo"
-		print "Can't find {}".format(button_name)
-		sys.exit(1)
-
-	url_base = 'http://192.168.1.84:55178'
-
-	button.grab()
+def run_loop(button):
 	for event in button.read_loop():
 		if event.type == evdev.ecodes.EV_KEY and event.value == evdev.KeyEvent.key_down:
 			print(evdev.categorize(event))
@@ -58,3 +43,22 @@ if __name__ == "__main__":
 					av_control.radio_play(url_base)
 				else:
 					av_control.radio_stop(url_base)
+
+
+if __name__ == "__main__":
+	import sys
+	import evdev
+
+	button_name = 'Satechi Media Button'
+	url_base = 'http://192.168.1.84:55178'
+
+	button = None
+	while not button:
+		button = find_button_device(button_name)
+		if button == None:
+			print "Waiting for input device {}".format(button_name)
+		time.sleep(2)
+
+	print "Found", button
+	button.grab()
+	run_loop(button)
