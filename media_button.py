@@ -11,22 +11,37 @@ def test_radio_play():
 	time.sleep(2)
 	av_control.radio_stop('http://192.168.1.84:55178')
 
+def test_find_button_device(name):
+	device = find_button_device(name)
+	if device == None:
+		raise "Failed"
+
+def devices():
+	import evdev
+	devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+	return devices
+
+def find_button_device(name):
+	for device in devices():
+		print(device.phys, device.name, device.fn, device.info)
+		if device.name == name:
+			return device
+	return None
+
+
 if __name__ == "__main__":
 	import sys
 	import evdev
 
-	devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-
-	if len(devices) == 0:
-		print "No devices found, try running with sudo"
+	button_name = 'Satechi Media Button'
+	button = find_button_device(button_name)
+	if button == None:
+		if len(devices()) == 0:
+			print "No devices found, try running with sudo"
+		print "Can't find {}".format(button_name)
 		sys.exit(1)
 
-
-		for device in devices:
-			print(device.phys, device.name, device.fn, device.info)
-			if device.name == 'Satechi Media Button':
-				print(device)
-				device.grab()
-				for event in device.read_loop():
-					if event.type == evdev.ecodes.EV_KEY:
-						print(evdev.categorize(event))
+	button.grab()
+	for event in button.read_loop():
+		if event.type == evdev.ecodes.EV_KEY:
+			print(evdev.categorize(event))
