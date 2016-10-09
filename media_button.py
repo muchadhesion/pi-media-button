@@ -16,6 +16,7 @@ def test_find_button_device(name):
 	if device == None:
 		raise Exception("Test Failed to find "+name)
 
+
 def devices():
 	import evdev
 	devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -41,13 +42,19 @@ if __name__ == "__main__":
 		print "Can't find {}".format(button_name)
 		sys.exit(1)
 
+	url_base = 'http://192.168.1.84:55178'
+
 	button.grab()
 	for event in button.read_loop():
 		if event.type == evdev.ecodes.EV_KEY and event.value == evdev.KeyEvent.key_down:
 			print(evdev.categorize(event))
 			if event.code == evdev.ecodes.KEY_VOLUMEUP:
-				av_control.post_volume_up('http://192.168.1.84:55178')
+				av_control.post_volume_up(url_base)
 			elif event.code == evdev.ecodes.KEY_VOLUMEDOWN:
-				av_control.post_volume_down('http://192.168.1.84:55178')
+				av_control.post_volume_down(url_base)
 			elif event.code == evdev.ecodes.KEY_PLAYPAUSE:
-				av_control.radio_play('http://192.168.1.84:55178')
+				playstate = av_control.get_playstate(url_base)
+				if playstate == 'Stopped':
+					av_control.radio_play(url_base)
+				else:
+					av_control.radio_stop(url_base)
