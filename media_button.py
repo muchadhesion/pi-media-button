@@ -14,7 +14,7 @@ def test_radio_play():
 def test_find_button_device(name):
 	device = find_button_device(name)
 	if device == None:
-		raise "Failed"
+		raise Exception("Test Failed to find "+name)
 
 def devices():
 	import evdev
