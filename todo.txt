@@ -1,0 +1,5 @@
+* Error handing of lost connection to button
+	Rediscovery; IOError "No such device " occurs on read_loop() when bluetooth button goes out of range for a ~10 secs
+	If we loop and Retry button discovery, evdev claims to find the button, but any attempts to read_loop fails with IOError.
+	Experiments with except: handing with button.close() and button.ungrab() not successful.
+
